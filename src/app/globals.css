@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-asset: #3B82F6;
+  --color-liability: #EF4444;
+  --color-equity: #EAB308;
+  --color-revenue: #F97316;
+  --color-expense: #22C55E;
+}
+
+body {
+  font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+}
+
+@layer utilities {
+  .drag-item {
+    @apply cursor-grab active:cursor-grabbing;
+  }
+  .drop-zone {
+    @apply border-2 border-dashed border-gray-300 rounded-lg transition-colors duration-200;
+  }
+  .drop-zone-active {
+    @apply border-blue-400 bg-blue-50;
+  }
+}
+
+@keyframes scale-bounce {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
+}
+
+@keyframes bar-grow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.animate-scale-bounce {
+  animation: scale-bounce 0.5s ease-in-out;
+}
+
+.animate-bar-grow {
+  animation: bar-grow 0.4s ease-out;
+  transform-origin: bottom;
+}
