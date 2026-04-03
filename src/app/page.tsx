@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLedger } from '@/hooks/useLedger';
+import { useAnswerHistory } from '@/hooks/useAnswerHistory';
 import { storyChapters } from '@/data/stories';
 import { CATEGORY_LABELS, CATEGORY_COLORS, AccountCategory } from '@/types';
 
@@ -12,6 +13,7 @@ const totalTransactions = storyChapters.reduce(
 
 export default function Dashboard() {
   const { progress, getTotalByCategory, resetProgress, isLoaded } = useLedger();
+  const { getStats, clearHistory } = useAnswerHistory();
 
   if (!isLoaded) {
     return (
@@ -61,6 +63,39 @@ export default function Dashboard() {
             : '📖 ストーリーモードから始めてみましょう！'}
         </p>
       </div>
+
+      {/* Answer stats */}
+      {getStats().total > 0 && (
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-700">回答統計</h2>
+            <Link
+              href="/history"
+              className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              履歴を見る →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="rounded-lg p-3 bg-gray-50 text-center">
+              <div className="text-xs text-gray-500">総回答数</div>
+              <div className="text-xl font-bold text-gray-800 mt-1">{getStats().total}</div>
+            </div>
+            <div className="rounded-lg p-3 bg-green-50 text-center">
+              <div className="text-xs text-green-600">正解</div>
+              <div className="text-xl font-bold text-green-700 mt-1">{getStats().correct}</div>
+            </div>
+            <div className="rounded-lg p-3 bg-red-50 text-center">
+              <div className="text-xs text-red-600">不正解</div>
+              <div className="text-xl font-bold text-red-700 mt-1">{getStats().incorrect}</div>
+            </div>
+            <div className="rounded-lg p-3 bg-blue-50 text-center">
+              <div className="text-xs text-blue-600">正答率</div>
+              <div className="text-xl font-bold text-blue-700 mt-1">{getStats().accuracy}%</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Chapter progress */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
@@ -178,6 +213,16 @@ export default function Dashboard() {
             5要素の色分けで理解しよう
           </p>
         </Link>
+        <Link
+          href="/history"
+          className="block bg-gradient-to-br from-slate-500 to-slate-600 text-white rounded-xl p-6 hover:shadow-lg transition-shadow"
+        >
+          <div className="text-3xl mb-2">📋</div>
+          <h3 className="font-bold text-lg">回答履歴</h3>
+          <p className="text-slate-100 text-sm mt-1">
+            過去の回答を振り返って復習しよう
+          </p>
+        </Link>
       </div>
 
       {/* Reset button */}
@@ -185,8 +230,9 @@ export default function Dashboard() {
         <div className="mt-8 text-center">
           <button
             onClick={() => {
-              if (confirm('学習データをすべてリセットしますか？')) {
+              if (confirm('学習データをすべてリセットしますか？（回答履歴も削除されます）')) {
                 resetProgress();
+                clearHistory();
               }
             }}
             className="text-sm text-gray-400 hover:text-red-500 transition-colors"

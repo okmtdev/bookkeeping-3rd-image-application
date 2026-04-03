@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { storyChapters } from '@/data/stories';
 import { useLedger } from '@/hooks/useLedger';
+import { useAnswerHistory } from '@/hooks/useAnswerHistory';
 import JournalEntryWorkspace from '@/components/JournalEntryWorkspace';
 import FinancialStatements from '@/components/FinancialStatements';
 
@@ -14,6 +15,7 @@ function StoryContent() {
   const [currentTransaction, setCurrentTransaction] = useState(0);
   const [showStatements, setShowStatements] = useState(false);
   const { progress, applyEntry, isLoaded } = useLedger();
+  const { addRecord, getLastRecord, getRecordsForTransaction } = useAnswerHistory();
 
   useEffect(() => {
     if (chapterParam !== null) {
@@ -118,7 +120,10 @@ function StoryContent() {
         key={transaction.id}
         transaction={transaction}
         onComplete={handleComplete}
+        onAnswer={addRecord}
         isCompleted={progress.completedTransactions.includes(transaction.id)}
+        lastResult={getLastRecord(transaction.id)?.isCorrect === true ? 'correct' : getLastRecord(transaction.id)?.isCorrect === false ? 'incorrect' : undefined}
+        attemptCount={getRecordsForTransaction(transaction.id).length}
       />
 
       {/* Financial statements toggle */}

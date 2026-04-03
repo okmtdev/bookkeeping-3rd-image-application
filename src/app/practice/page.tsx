@@ -3,12 +3,14 @@
 import { useState, useMemo } from 'react';
 import { storyChapters } from '@/data/stories';
 import { useLedger } from '@/hooks/useLedger';
+import { useAnswerHistory } from '@/hooks/useAnswerHistory';
 import JournalEntryWorkspace from '@/components/JournalEntryWorkspace';
 import FinancialStatements from '@/components/FinancialStatements';
 import { Transaction } from '@/types';
 
 export default function PracticePage() {
   const { progress, applyEntry, isLoaded } = useLedger();
+  const { addRecord, getLastRecord, getRecordsForTransaction } = useAnswerHistory();
   const [mode, setMode] = useState<'sequential' | 'random'>('sequential');
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -99,7 +101,10 @@ export default function PracticePage() {
           key={currentTx.id + mode}
           transaction={currentTx}
           onComplete={handleComplete}
+          onAnswer={addRecord}
           isCompleted={progress.completedTransactions.includes(currentTx.id)}
+          lastResult={getLastRecord(currentTx.id)?.isCorrect === true ? 'correct' : getLastRecord(currentTx.id)?.isCorrect === false ? 'incorrect' : undefined}
+          attemptCount={getRecordsForTransaction(currentTx.id).length}
         />
       )}
 

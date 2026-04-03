@@ -32,6 +32,16 @@ export interface StoryChapter {
   transactions: Transaction[];
 }
 
+export interface AnswerRecord {
+  transactionId: string;
+  isCorrect: boolean;
+  answeredAt: string; // ISO 8601
+  debitAccountId: string | null;
+  creditAccountId: string | null;
+  debitAmount: number;
+  creditAmount: number;
+}
+
 export interface LedgerState {
   [accountId: string]: number;
 }

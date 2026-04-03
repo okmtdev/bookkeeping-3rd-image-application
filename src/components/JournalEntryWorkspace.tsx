@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Account, Transaction, CATEGORY_COLORS, CATEGORY_LABELS } from '@/types';
+import { Account, Transaction, AnswerRecord, CATEGORY_COLORS, CATEGORY_LABELS } from '@/types';
 import { accounts, getAccount } from '@/data/accounts';
 import AccountBlock from './AccountBlock';
 import BalanceScale from './BalanceScale';
@@ -9,7 +9,10 @@ import BalanceScale from './BalanceScale';
 interface JournalEntryWorkspaceProps {
   transaction: Transaction;
   onComplete: (transactionId: string) => void;
+  onAnswer?: (record: Omit<AnswerRecord, 'answeredAt'>) => void;
   isCompleted: boolean;
+  lastResult?: 'correct' | 'incorrect';
+  attemptCount?: number;
 }
 
 interface DroppedItem {
@@ -20,7 +23,10 @@ interface DroppedItem {
 export default function JournalEntryWorkspace({
   transaction,
   onComplete,
+  onAnswer,
   isCompleted,
+  lastResult,
+  attemptCount,
 }: JournalEntryWorkspaceProps) {
   const [debitItem, setDebitItem] = useState<DroppedItem | null>(null);
   const [creditItem, setCreditItem] = useState<DroppedItem | null>(null);
@@ -81,6 +87,14 @@ export default function JournalEntryWorkspace({
       da === transaction.correctEntry.debit.amount &&
       ca === transaction.correctEntry.credit.amount;
     setResult(correct ? 'correct' : 'incorrect');
+    onAnswer?.({
+      transactionId: transaction.id,
+      isCorrect: correct,
+      debitAccountId: debitItem.account.id,
+      creditAccountId: creditItem.account.id,
+      debitAmount: da,
+      creditAmount: ca,
+    });
     if (correct) {
       onComplete(transaction.id);
     }
@@ -105,11 +119,28 @@ export default function JournalEntryWorkspace({
       <div className="bg-gradient-to-r from-slate-700 to-slate-800 text-white p-4 md:p-6">
         <h3 className="font-bold text-lg">{transaction.title}</h3>
         <p className="text-slate-200 mt-1 text-sm">{transaction.description}</p>
-        {isCompleted && (
-          <span className="inline-block mt-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-            ✅ 完了済み
-          </span>
-        )}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {isCompleted && (
+            <span className="inline-block bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+              完了済み
+            </span>
+          )}
+          {lastResult === 'correct' && (
+            <span className="inline-block bg-emerald-500 text-white text-xs px-2 py-1 rounded-full">
+              前回正解
+            </span>
+          )}
+          {lastResult === 'incorrect' && (
+            <span className="inline-block bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+              前回不正解
+            </span>
+          )}
+          {attemptCount !== undefined && attemptCount > 0 && (
+            <span className="inline-block bg-slate-500 text-white text-xs px-2 py-1 rounded-full">
+              回答回数: {attemptCount}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Story */}
