@@ -87,6 +87,92 @@ export const tAccountQuestions: TAccountQuestion[] = [
       { date: '8/22', description: '現金', amount: 80000 },
     ],
   },
+  {
+    id: 'ta_6',
+    title: '普通預金勘定の記入',
+    description:
+      '次の取引を普通預金勘定に記入しなさい。\n9/1 前月繰越 400,000円\n9/5 売掛金200,000円が振り込まれた。\n9/10 家賃60,000円を口座振替で支払った。\n9/15 銀行から300,000円を借り入れ、普通預金に入金された。\n9/25 買掛金150,000円を振り込んだ。',
+    hint: '普通預金は資産なので、増加は借方（左）、減少は貸方（右）に記入します。',
+    accountName: '普通預金',
+    accountId: 'deposit',
+    correctDebitEntries: [
+      { date: '9/1', description: '前月繰越', amount: 400000 },
+      { date: '9/5', description: '売掛金', amount: 200000 },
+      { date: '9/15', description: '借入金', amount: 300000 },
+    ],
+    correctCreditEntries: [
+      { date: '9/10', description: '支払家賃', amount: 60000 },
+      { date: '9/25', description: '買掛金', amount: 150000 },
+    ],
+  },
+  {
+    id: 'ta_7',
+    title: '仕入勘定の記入',
+    description:
+      '次の取引を仕入勘定に記入しなさい。\n10/2 商品70,000円を現金で仕入れた。\n10/8 商品150,000円を掛けで仕入れた。\n10/12 10/8の掛け仕入のうち20,000円分が不良品のため返品した。\n10/20 商品100,000円を手形を振り出して仕入れた。',
+    hint: '仕入は費用なので、発生は借方、取消（返品）は貸方に記入します。',
+    accountName: '仕入',
+    accountId: 'purchases',
+    correctDebitEntries: [
+      { date: '10/2', description: '現金', amount: 70000 },
+      { date: '10/8', description: '買掛金', amount: 150000 },
+      { date: '10/20', description: '支払手形', amount: 100000 },
+    ],
+    correctCreditEntries: [
+      { date: '10/12', description: '買掛金', amount: 20000 },
+    ],
+  },
+  {
+    id: 'ta_8',
+    title: '支払家賃勘定の記入',
+    description:
+      '次の取引を支払家賃勘定に記入しなさい。\n4/1 4月分の家賃60,000円を普通預金から支払った。\n5/1 5月分の家賃60,000円を普通預金から支払った。\n6/1 6月分の家賃60,000円を普通預金から支払った。\n6/30 決算にあたり、6月分のうち翌期分30,000円を前払費用に振り替えた。',
+    hint: '支払家賃は費用なので、発生は借方、取消（前払振替）は貸方に記入します。',
+    accountName: '支払家賃',
+    accountId: 'rent',
+    correctDebitEntries: [
+      { date: '4/1', description: '普通預金', amount: 60000 },
+      { date: '5/1', description: '普通預金', amount: 60000 },
+      { date: '6/1', description: '普通預金', amount: 60000 },
+    ],
+    correctCreditEntries: [
+      { date: '6/30', description: '前払費用', amount: 30000 },
+    ],
+  },
+  {
+    id: 'ta_9',
+    title: '受取手形勘定の記入',
+    description:
+      '次の取引を受取手形勘定に記入しなさい。\n11/1 前月繰越 100,000円\n11/5 商品90,000円を販売し、約束手形を受け取った。\n11/12 受取手形80,000円が満期となり、普通預金に入金された。\n11/20 商品60,000円を販売し、約束手形を受け取った。',
+    hint: '受取手形は資産なので、増加（受取）は借方、減少（満期回収）は貸方に記入します。',
+    accountName: '受取手形',
+    accountId: 'notes_receivable',
+    correctDebitEntries: [
+      { date: '11/1', description: '前月繰越', amount: 100000 },
+      { date: '11/5', description: '売上', amount: 90000 },
+      { date: '11/20', description: '売上', amount: 60000 },
+    ],
+    correctCreditEntries: [
+      { date: '11/12', description: '普通預金', amount: 80000 },
+    ],
+  },
+  {
+    id: 'ta_10',
+    title: '前払金勘定の記入',
+    description:
+      '次の取引を前払金勘定に記入しなさい。\n12/3 商品の手付金として40,000円を現金で支払った。\n12/10 別の商品の手付金20,000円を普通預金から支払った。\n12/18 12/3の商品が届き、残額60,000円を現金で支払った（商品代金合計100,000円）。\n12/25 12/10の商品が届き、残額30,000円を現金で支払った（商品代金合計50,000円）。',
+    hint: '前払金は資産なので、増加（手付金支払い）は借方、減少（商品到着で仕入に振替）は貸方に記入します。',
+    accountName: '前払金',
+    accountId: 'prepaid',
+    correctDebitEntries: [
+      { date: '12/3', description: '現金', amount: 40000 },
+      { date: '12/10', description: '普通預金', amount: 20000 },
+    ],
+    correctCreditEntries: [
+      { date: '12/18', description: '仕入', amount: 40000 },
+      { date: '12/25', description: '仕入', amount: 20000 },
+    ],
+  },
 ];
 
 // 第二問: 補助簿選択問題
@@ -200,5 +286,60 @@ export const subsidiaryLedgerQuestions: SubsidiaryLedgerQuestion[] = [
       credit: { accountName: '売上', amount: 180000 },
     },
     correctLedgers: ['sales_journal', 'notes_receivable_book'],
+  },
+  {
+    id: 'sl_11',
+    title: '現金売上',
+    description: '商品150,000円を現金で販売した。',
+    hint: '現金が動くので現金出納帳、売上なので売上帳に記入します。',
+    journalEntry: {
+      debit: { accountName: '現金', amount: 150000 },
+      credit: { accountName: '売上', amount: 150000 },
+    },
+    correctLedgers: ['cash_book', 'sales_journal'],
+  },
+  {
+    id: 'sl_12',
+    title: '掛け仕入の返品',
+    description: '仕入先F商店への買掛金のうち、30,000円分の商品を返品した。',
+    hint: '買掛金が減少するので買掛金元帳、仕入の取消なので仕入帳に記入します。',
+    journalEntry: {
+      debit: { accountName: '買掛金', amount: 30000 },
+      credit: { accountName: '仕入', amount: 30000 },
+    },
+    correctLedgers: ['purchase_journal', 'accounts_payable_ledger'],
+  },
+  {
+    id: 'sl_13',
+    title: '売掛金の手形回収',
+    description: '得意先G商店から売掛金200,000円について、約束手形を受け取った。',
+    hint: '受取手形を受け取ったので受取手形記入帳、売掛金が減少するので売掛金元帳に記入します。',
+    journalEntry: {
+      debit: { accountName: '受取手形', amount: 200000 },
+      credit: { accountName: '売掛金', amount: 200000 },
+    },
+    correctLedgers: ['notes_receivable_book', 'accounts_receivable_ledger'],
+  },
+  {
+    id: 'sl_14',
+    title: '手形の支払い（満期決済）',
+    description: '支払手形100,000円が満期となり、現金で決済した。',
+    hint: '現金が動くので現金出納帳、支払手形が減少するので支払手形記入帳に記入します。',
+    journalEntry: {
+      debit: { accountName: '支払手形', amount: 100000 },
+      credit: { accountName: '現金', amount: 100000 },
+    },
+    correctLedgers: ['cash_book', 'notes_payable_book'],
+  },
+  {
+    id: 'sl_15',
+    title: '掛け売上の返品',
+    description: '得意先H商店から売掛金のうち15,000円分の商品が返品された。',
+    hint: '売掛金が減少するので売掛金元帳、売上の取消なので売上帳に記入します。',
+    journalEntry: {
+      debit: { accountName: '売上', amount: 15000 },
+      credit: { accountName: '売掛金', amount: 15000 },
+    },
+    correctLedgers: ['sales_journal', 'accounts_receivable_ledger'],
   },
 ];
