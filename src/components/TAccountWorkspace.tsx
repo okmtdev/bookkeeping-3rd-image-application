@@ -6,6 +6,7 @@ import { TAccountQuestion, TAccountEntry } from '@/types';
 interface TAccountWorkspaceProps {
   question: TAccountQuestion;
   onCorrect?: () => void;
+  onAnswer?: (questionId: string, questionTitle: string, isCorrect: boolean) => void;
 }
 
 interface EntryInput {
@@ -16,7 +17,7 @@ interface EntryInput {
 
 const emptyEntry = (): EntryInput => ({ date: '', description: '', amount: '' });
 
-export default function TAccountWorkspace({ question, onCorrect }: TAccountWorkspaceProps) {
+export default function TAccountWorkspace({ question, onCorrect, onAnswer }: TAccountWorkspaceProps) {
   const maxRows = Math.max(question.correctDebitEntries.length, question.correctCreditEntries.length);
   const [debitInputs, setDebitInputs] = useState<EntryInput[]>(
     Array.from({ length: question.correctDebitEntries.length }, emptyEntry)
@@ -59,12 +60,14 @@ export default function TAccountWorkspace({ question, onCorrect }: TAccountWorks
   const handleSubmit = () => {
     const debitOk = checkMatch(debitInputs, question.correctDebitEntries);
     const creditOk = checkMatch(creditInputs, question.correctCreditEntries);
-    if (debitOk && creditOk) {
+    const isCorrect = debitOk && creditOk;
+    if (isCorrect) {
       setResult('correct');
       onCorrect?.();
     } else {
       setResult('incorrect');
     }
+    onAnswer?.(question.id, question.title, isCorrect);
   };
 
   const handleShowAnswer = () => {

@@ -6,6 +6,7 @@ import { SubsidiaryLedgerQuestion, SubsidiaryLedgerType, SUBSIDIARY_LEDGER_LABEL
 interface SubsidiaryLedgerWorkspaceProps {
   question: SubsidiaryLedgerQuestion;
   onCorrect?: () => void;
+  onAnswer?: (questionId: string, questionTitle: string, isCorrect: boolean) => void;
 }
 
 const allLedgerTypes: SubsidiaryLedgerType[] = [
@@ -19,7 +20,7 @@ const allLedgerTypes: SubsidiaryLedgerType[] = [
   'accounts_payable_ledger',
 ];
 
-export default function SubsidiaryLedgerWorkspace({ question, onCorrect }: SubsidiaryLedgerWorkspaceProps) {
+export default function SubsidiaryLedgerWorkspace({ question, onCorrect, onAnswer }: SubsidiaryLedgerWorkspaceProps) {
   const [selected, setSelected] = useState<Set<SubsidiaryLedgerType>>(new Set());
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [showHint, setShowHint] = useState(false);
@@ -47,6 +48,7 @@ export default function SubsidiaryLedgerWorkspace({ question, onCorrect }: Subsi
     } else {
       setResult('incorrect');
     }
+    onAnswer?.(question.id, question.title, isCorrect);
   };
 
   const handleShowAnswer = () => {

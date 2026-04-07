@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { storyChapters } from '@/data/stories';
 import { useLedger } from '@/hooks/useLedger';
+import { useAnswerHistory } from '@/hooks/useAnswerHistory';
 import JournalEntryWorkspace from '@/components/JournalEntryWorkspace';
 import FinancialStatements from '@/components/FinancialStatements';
 import { Transaction } from '@/types';
 
 export default function PracticePage() {
   const { progress, applyEntry, isLoaded } = useLedger();
+  const { addRecord, getLastResult } = useAnswerHistory();
   const [mode, setMode] = useState<'sequential' | 'random'>('sequential');
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -48,6 +50,13 @@ export default function PracticePage() {
       transactionId
     );
   };
+
+  const handleAnswer = useCallback(
+    (questionId: string, questionTitle: string, isCorrect: boolean) => {
+      addRecord({ questionId, questionTitle, category: 'journal', isCorrect });
+    },
+    [addRecord]
+  );
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto">
@@ -100,6 +109,7 @@ export default function PracticePage() {
           transaction={currentTx}
           onComplete={handleComplete}
           isCompleted={progress.completedTransactions.includes(currentTx.id)}
+          onAnswer={handleAnswer}
         />
       )}
 

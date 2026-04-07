@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import TAccountWorkspace from '@/components/TAccountWorkspace';
 import SubsidiaryLedgerWorkspace from '@/components/SubsidiaryLedgerWorkspace';
 import { tAccountQuestions, subsidiaryLedgerQuestions } from '@/data/exam2Questions';
+import { useAnswerHistory } from '@/hooks/useAnswerHistory';
+import { QuestionCategory } from '@/types';
 
 type QuestionType = 't-account' | 'subsidiary-ledger';
 
@@ -12,6 +14,7 @@ export default function Exam2Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedTA, setCompletedTA] = useState<Set<string>>(new Set());
   const [completedSL, setCompletedSL] = useState<Set<string>>(new Set());
+  const { addRecord } = useAnswerHistory();
 
   const questions = questionType === 't-account' ? tAccountQuestions : subsidiaryLedgerQuestions;
   const currentQuestion = questions[currentIndex];
@@ -24,6 +27,14 @@ export default function Exam2Page() {
       setCompletedSL((prev) => new Set([...prev, currentQuestion.id]));
     }
   };
+
+  const handleAnswer = useCallback(
+    (questionId: string, questionTitle: string, isCorrect: boolean) => {
+      const category: QuestionCategory = questionType === 't-account' ? 't-account' : 'subsidiary-ledger';
+      addRecord({ questionId, questionTitle, category, isCorrect });
+    },
+    [addRecord, questionType]
+  );
 
   const switchType = (type: QuestionType) => {
     setQuestionType(type);
@@ -104,12 +115,14 @@ export default function Exam2Page() {
           key={currentQuestion.id}
           question={tAccountQuestions[currentIndex]}
           onCorrect={handleCorrect}
+          onAnswer={handleAnswer}
         />
       ) : (
         <SubsidiaryLedgerWorkspace
           key={currentQuestion.id}
           question={subsidiaryLedgerQuestions[currentIndex]}
           onCorrect={handleCorrect}
+          onAnswer={handleAnswer}
         />
       )}
 

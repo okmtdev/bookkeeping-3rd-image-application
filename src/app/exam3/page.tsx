@@ -1,18 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import WorksheetWorkspace from '@/components/WorksheetWorkspace';
 import { worksheetQuestions } from '@/data/exam3Questions';
+import { useAnswerHistory } from '@/hooks/useAnswerHistory';
 
 export default function Exam3Page() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completed, setCompleted] = useState<Set<string>>(new Set());
+  const { addRecord } = useAnswerHistory();
 
   const currentQuestion = worksheetQuestions[currentIndex];
 
   const handleCorrect = () => {
     setCompleted((prev) => new Set([...prev, currentQuestion.id]));
   };
+
+  const handleAnswer = useCallback(
+    (questionId: string, questionTitle: string, isCorrect: boolean) => {
+      addRecord({ questionId, questionTitle, category: 'worksheet', isCorrect });
+    },
+    [addRecord]
+  );
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto pb-20 md:pb-4">
@@ -55,6 +64,7 @@ export default function Exam3Page() {
         key={currentQuestion.id}
         question={currentQuestion}
         onCorrect={handleCorrect}
+        onAnswer={handleAnswer}
       />
 
       {/* Navigation */}

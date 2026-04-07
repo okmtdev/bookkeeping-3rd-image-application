@@ -10,6 +10,7 @@ interface JournalEntryWorkspaceProps {
   transaction: Transaction;
   onComplete: (transactionId: string) => void;
   isCompleted: boolean;
+  onAnswer?: (questionId: string, questionTitle: string, isCorrect: boolean) => void;
 }
 
 interface DroppedItem {
@@ -21,6 +22,7 @@ export default function JournalEntryWorkspace({
   transaction,
   onComplete,
   isCompleted,
+  onAnswer,
 }: JournalEntryWorkspaceProps) {
   const [debitItem, setDebitItem] = useState<DroppedItem | null>(null);
   const [creditItem, setCreditItem] = useState<DroppedItem | null>(null);
@@ -81,6 +83,7 @@ export default function JournalEntryWorkspace({
       da === transaction.correctEntry.debit.amount &&
       ca === transaction.correctEntry.credit.amount;
     setResult(correct ? 'correct' : 'incorrect');
+    onAnswer?.(transaction.id, transaction.title, correct);
     if (correct) {
       onComplete(transaction.id);
     }
