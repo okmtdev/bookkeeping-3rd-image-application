@@ -600,4 +600,253 @@ export const storyChapters: StoryChapter[] = [
       },
     ],
   },
+  {
+    id: 'chapter14',
+    title: '第14章：給料と預り金',
+    description: '給料の支払い時に源泉徴収する所得税や社会保険料の処理を学びます。',
+    icon: '💼',
+    transactions: [
+      {
+        id: 'ch14_t1',
+        title: '給料の源泉徴収',
+        description: '給料200,000円から所得税15,000円を差し引き、残額を現金で支払いました。',
+        story: '従業員にお給料を払うとき、所得税を会社が代わりに天引きします。天引きしたお金は一時的に預かっているだけなので「預り金」（負債）として記録します。',
+        hint: '給料（費用）が借方に、預り金（負債）と現金（資産）が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'salary', amount: 200000 },
+          credit: { accountId: 'deposits_received', amount: 15000 },
+        },
+      },
+      {
+        id: 'ch14_t2',
+        title: '預り金の納付',
+        description: '預り金（源泉所得税）15,000円を現金で税務署に納付しました。',
+        story: '従業員から預かっていた所得税を、期日までに税務署に納めます。預り金（負債）が減り、現金（資産）も減ります。',
+        hint: '預り金（負債）が減るので借方に、現金（資産）が減るので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'deposits_received', amount: 15000 },
+          credit: { accountId: 'cash', amount: 15000 },
+        },
+      },
+      {
+        id: 'ch14_t3',
+        title: '固定資産税の支払い',
+        description: '店舗の固定資産税40,000円を普通預金から支払いました。',
+        story: '土地や建物を持っていると、毎年固定資産税がかかります。40,000円を銀行口座から納付しました。税金の支払いは「租税公課」で処理します。',
+        hint: '租税公課（費用）が発生するので借方に、普通預金（資産）が減るので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'taxes_dues', amount: 40000 },
+          credit: { accountId: 'deposit', amount: 40000 },
+        },
+      },
+      {
+        id: 'ch14_t4',
+        title: '社会保険料の立替え',
+        description: '従業員の社会保険料20,000円を現金で立て替えて支払いました。',
+        story: '従業員が負担すべき社会保険料を、一時的にお店のお金で立て替えました。後で給料から差し引いて回収します。',
+        hint: '立替金（資産）が増えるので借方に、現金（資産）が減るので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'advance_to_employee', amount: 20000 },
+          credit: { accountId: 'cash', amount: 20000 },
+        },
+      },
+    ],
+  },
+  {
+    id: 'chapter15',
+    title: '第15章：固定資産の売却',
+    description: '固定資産を売却したときの利益や損失の処理を学びます。',
+    icon: '🏷️',
+    transactions: [
+      {
+        id: 'ch15_t1',
+        title: '備品の売却（売却益）',
+        description: '帳簿価額60,000円の備品を80,000円で売却し、代金は現金で受け取りました。',
+        story: '古くなった備品を売却しました。帳簿価額より高く売れたので、差額20,000円は「固定資産売却益」という収益になります。',
+        hint: '現金（資産）が借方に、備品（資産）が貸方に、差額が固定資産売却益（収益）として貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'cash', amount: 80000 },
+          credit: { accountId: 'gain_on_sale', amount: 20000 },
+        },
+      },
+      {
+        id: 'ch15_t2',
+        title: '車両の売却（売却損）',
+        description: '帳簿価額300,000円の車両を250,000円で売却し、代金は普通預金に入金されました。',
+        story: '配達用の車両を売却しました。帳簿価額より安くしか売れなかったので、差額50,000円は「固定資産売却損」という費用になります。',
+        hint: '普通預金（資産）と固定資産売却損（費用）が借方に、車両運搬具（資産）が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'loss_on_sale', amount: 50000 },
+          credit: { accountId: 'vehicles', amount: 300000 },
+        },
+      },
+      {
+        id: 'ch15_t3',
+        title: '備品の売却（帳簿価額どおり）',
+        description: '帳簿価額45,000円の備品を45,000円で売却し、代金は来月受け取ることにしました。',
+        story: '不要になった備品をちょうど帳簿価額と同じ金額で売却できました。売却益も売却損も出ません。代金は後日受け取るので「未収入金」です。',
+        hint: '未収入金（資産）が増えるので借方に、備品（資産）が減るので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'accrued_revenue', amount: 45000 },
+          credit: { accountId: 'equipment', amount: 45000 },
+        },
+      },
+    ],
+  },
+  {
+    id: 'chapter16',
+    title: '第16章：定期預金と現金の管理',
+    description: '定期預金への預け入れや、現金過剰の処理を学びます。',
+    icon: '🔐',
+    transactions: [
+      {
+        id: 'ch16_t1',
+        title: '定期預金への預け入れ',
+        description: '普通預金から500,000円を定期預金に預け入れました。',
+        story: '余裕資金を有利に運用するため、普通預金から定期預金に500,000円を移しました。どちらも資産ですが、定期預金は一定期間引き出せません。',
+        hint: '定期預金（資産）が増えるので借方に、普通預金（資産）が減るので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'fixed_deposit', amount: 500000 },
+          credit: { accountId: 'deposit', amount: 500000 },
+        },
+      },
+      {
+        id: 'ch16_t2',
+        title: '定期預金の解約',
+        description: '定期預金500,000円を解約し、利息2,500円とともに普通預金に入金されました。',
+        story: '定期預金の満期が来たので解約しました。元金500,000円と利息2,500円が普通預金に入ります。利息は「受取利息」という収益です。',
+        hint: '普通預金（資産）が借方に、定期預金（資産）と受取利息（収益）が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'deposit', amount: 502500 },
+          credit: { accountId: 'interest_income', amount: 2500 },
+        },
+      },
+      {
+        id: 'ch16_t3',
+        title: '現金過不足の発見（過剰）',
+        description: '現金の実際有高が帳簿残高より5,000円多いことが判明しました。',
+        story: '金庫の現金を数えたら、帳簿より5,000円多くありました。原因不明なので「現金過不足」として処理します。不足の場合と借方・貸方が逆になります。',
+        hint: '現金（資産）が増えるので借方に、現金過不足が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'cash', amount: 5000 },
+          credit: { accountId: 'cash_over_short', amount: 5000 },
+        },
+      },
+      {
+        id: 'ch16_t4',
+        title: '現金過剰の原因判明（雑益）',
+        description: '決算日になっても現金過不足5,000円の原因が判明しなかったため、雑益として処理しました。',
+        story: '決算を迎えましたが、現金が5,000円多い原因はついにわかりませんでした。原因不明の過剰は「雑益」（収益）として処理します。',
+        hint: '現金過不足が借方に、雑益（収益）が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'cash_over_short', amount: 5000 },
+          credit: { accountId: 'miscellaneous_income', amount: 5000 },
+        },
+      },
+    ],
+  },
+  {
+    id: 'chapter17',
+    title: '第17章：消耗品と前払い・前受けの応用',
+    description: '消耗品の期末処理や、前受収益の計上を学びます。',
+    icon: '📐',
+    transactions: [
+      {
+        id: 'ch17_t1',
+        title: '消耗品の購入（資産計上）',
+        description: '事務用品50,000円を現金で購入し、消耗品（資産）として記録しました。',
+        story: '大量の事務用品をまとめ買いしました。まだ全部は使わないので、使っていない分は「消耗品」（資産）として記録しておきます。',
+        hint: '消耗品（資産）が増えるので借方に、現金（資産）が減るので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'supplies', amount: 50000 },
+          credit: { accountId: 'cash', amount: 50000 },
+        },
+      },
+      {
+        id: 'ch17_t2',
+        title: '消耗品の費用振替',
+        description: '決算にあたり、消耗品のうち35,000円分を使用していたため費用に振り替えました。',
+        story: '期末に消耗品の残りを確認したら、50,000円のうち35,000円分を使い切っていました。使った分は「消耗品費」（費用）に振り替えます。',
+        hint: '消耗品費（費用）が発生するので借方に、消耗品（資産）が減るので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'supplies_expense', amount: 35000 },
+          credit: { accountId: 'supplies', amount: 35000 },
+        },
+      },
+      {
+        id: 'ch17_t3',
+        title: '前受収益の計上',
+        description: '受取手数料のうち10,000円が翌期分であることが判明しました。',
+        story: '決算にあたり、受け取った手数料を確認すると、10,000円は翌期のサービスに対するものでした。当期の収益から除き、「前受収益」（負債）に振り替えます。',
+        hint: '受取手数料（収益）を減らすので借方に、前受収益（負債）が増えるので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'fee_income', amount: 10000 },
+          credit: { accountId: 'unearned_income', amount: 10000 },
+        },
+      },
+      {
+        id: 'ch17_t4',
+        title: '現金不足の雑損処理',
+        description: '決算日になっても現金過不足2,000円（不足）の原因が判明しなかったため、雑損として処理しました。',
+        story: '現金が2,000円不足している原因がわからないまま決算を迎えました。原因不明の不足は「雑損」（費用）として処理します。',
+        hint: '雑損（費用）が発生するので借方に、現金過不足が解消されるので貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'miscellaneous_expense', amount: 2000 },
+          credit: { accountId: 'cash_over_short', amount: 2000 },
+        },
+      },
+    ],
+  },
+  {
+    id: 'chapter18',
+    title: '第18章：仮払金の精算と前払金の振替',
+    description: '仮払金の精算処理や前払金から仕入への振替を学びます。',
+    icon: '🧮',
+    transactions: [
+      {
+        id: 'ch18_t1',
+        title: '仮払金の精算（不足）',
+        description: '出張から戻った従業員が旅費28,000円を報告し、仮払金30,000円との差額2,000円を現金で返却しました。',
+        story: '出張前に渡した仮払金30,000円に対し、実際の旅費は28,000円でした。差額2,000円が現金で戻ってきます。仮払金を取り崩し、旅費交通費を確定させます。',
+        hint: '旅費交通費（費用）と現金（資産）が借方に、仮払金（資産）が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'travel_expense', amount: 28000 },
+          credit: { accountId: 'temporary_payment', amount: 30000 },
+        },
+      },
+      {
+        id: 'ch18_t2',
+        title: '仮払金の精算（超過）',
+        description: '出張から戻った従業員が旅費35,000円を報告し、仮払金30,000円との差額5,000円を現金で支払いました。',
+        story: '実際の旅費は35,000円で、仮払金30,000円では足りませんでした。不足分5,000円を追加で現金で支払います。',
+        hint: '旅費交通費（費用）が借方に、仮払金（資産）と現金（資産）が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'travel_expense', amount: 35000 },
+          credit: { accountId: 'temporary_payment', amount: 30000 },
+        },
+      },
+      {
+        id: 'ch18_t3',
+        title: '前払金と仕入れ',
+        description: '前払金30,000円を支払っていた商品が届き、残額70,000円を現金で支払いました。',
+        story: '手付金30,000円を払っていた商品がついに届きました。商品代金は合計100,000円なので、残りの70,000円を現金で支払います。前払金を取り崩して仕入を計上します。',
+        hint: '仕入（費用）が借方に、前払金（資産）と現金（資産）が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'purchases', amount: 100000 },
+          credit: { accountId: 'prepaid', amount: 30000 },
+        },
+      },
+      {
+        id: 'ch18_t4',
+        title: '立替金の回収',
+        description: '従業員に立て替えていた8,000円を給料から差し引きました。給料総額は180,000円で、差引額172,000円を現金で支払いました。',
+        story: '以前立て替えていた8,000円を今月のお給料から差し引いて回収します。給料180,000円から8,000円を引いた172,000円を従業員に渡します。',
+        hint: '給料（費用）が借方に、立替金（資産）と現金（資産）が貸方に置きます。',
+        correctEntry: {
+          debit: { accountId: 'salary', amount: 180000 },
+          credit: { accountId: 'advance_to_employee', amount: 8000 },
+        },
+      },
+    ],
+  },
 ];
