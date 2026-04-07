@@ -136,6 +136,49 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Exam sections */}
+      <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">試験対策</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <Link
+            href="/practice"
+            className="block p-4 rounded-lg border-2 border-green-200 bg-green-50 hover:shadow-md transition-all"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">✏️</span>
+              <div>
+                <h3 className="font-bold text-gray-800">第一問</h3>
+                <p className="text-xs text-gray-500">仕訳問題</p>
+              </div>
+            </div>
+          </Link>
+          <Link
+            href="/exam2"
+            className="block p-4 rounded-lg border-2 border-indigo-200 bg-indigo-50 hover:shadow-md transition-all"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">📝</span>
+              <div>
+                <h3 className="font-bold text-gray-800">第二問</h3>
+                <p className="text-xs text-gray-500">勘定記入・補助簿選択</p>
+              </div>
+            </div>
+          </Link>
+          <Link
+            href="/exam3"
+            className="block p-4 rounded-lg border-2 border-orange-200 bg-orange-50 hover:shadow-md transition-all"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">📋</span>
+              <div>
+                <h3 className="font-bold text-gray-800">第三問</h3>
+                <p className="text-xs text-gray-500">精算表の作成</p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+
       {/* Quick links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link
@@ -153,9 +196,29 @@ export default function Dashboard() {
           className="block bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 hover:shadow-lg transition-shadow"
         >
           <div className="text-3xl mb-2">✏️</div>
-          <h3 className="font-bold text-lg">仕訳練習</h3>
+          <h3 className="font-bold text-lg">第一問 仕訳練習</h3>
           <p className="text-green-100 text-sm mt-1">
             ドラッグ&ドロップで仕訳を組み立てよう
+          </p>
+        </Link>
+        <Link
+          href="/exam2"
+          className="block bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-xl p-6 hover:shadow-lg transition-shadow"
+        >
+          <div className="text-3xl mb-2">📝</div>
+          <h3 className="font-bold text-lg">第二問 勘定記入</h3>
+          <p className="text-indigo-100 text-sm mt-1">
+            T勘定への記入と補助簿の選択を練習
+          </p>
+        </Link>
+        <Link
+          href="/exam3"
+          className="block bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-xl p-6 hover:shadow-lg transition-shadow"
+        >
+          <div className="text-3xl mb-2">📋</div>
+          <h3 className="font-bold text-lg">第三問 精算表</h3>
+          <p className="text-orange-100 text-sm mt-1">
+            決算整理仕訳から精算表を完成させよう
           </p>
         </Link>
         <Link
