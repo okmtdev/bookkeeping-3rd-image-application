@@ -160,6 +160,28 @@ export interface WorksheetQuestion {
   }[];
 }
 
+// 回答履歴
+export type QuestionCategory = 'journal' | 't-account' | 'subsidiary-ledger' | 'worksheet';
+
+export const QUESTION_CATEGORY_LABELS: Record<QuestionCategory, string> = {
+  journal: '仕訳（第一問）',
+  't-account': '勘定記入（第二問）',
+  'subsidiary-ledger': '補助簿選択（第二問）',
+  worksheet: '精算表（第三問）',
+};
+
+export interface AnswerRecord {
+  questionId: string;
+  questionTitle: string;
+  category: QuestionCategory;
+  isCorrect: boolean;
+  answeredAt: string; // ISO date string
+}
+
+export interface AnswerHistoryData {
+  records: AnswerRecord[];
+}
+
 export const CATEGORY_POSITIONS: Record<AccountCategory, 'left' | 'right'> = {
   asset: 'left',
   liability: 'right',

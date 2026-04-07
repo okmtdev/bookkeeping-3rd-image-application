@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useLedger } from '@/hooks/useLedger';
+import { useAnswerHistory } from '@/hooks/useAnswerHistory';
 import { storyChapters } from '@/data/stories';
-import { CATEGORY_LABELS, CATEGORY_COLORS, AccountCategory } from '@/types';
+import { CATEGORY_LABELS, CATEGORY_COLORS, AccountCategory, QuestionCategory, QUESTION_CATEGORY_LABELS } from '@/types';
 
 const totalTransactions = storyChapters.reduce(
   (sum, ch) => sum + ch.transactions.length,
@@ -12,6 +13,7 @@ const totalTransactions = storyChapters.reduce(
 
 export default function Dashboard() {
   const { progress, getTotalByCategory, resetProgress, isLoaded } = useLedger();
+  const { records, getCategoryStats } = useAnswerHistory();
 
   if (!isLoaded) {
     return (
@@ -135,6 +137,57 @@ export default function Dashboard() {
           })}
         </div>
       </div>
+
+      {/* Answer History Summary */}
+      {records.length > 0 && (
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-700">回答成績</h2>
+            <Link
+              href="/history"
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
+              詳細を見る →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {(['journal', 't-account', 'subsidiary-ledger', 'worksheet'] as QuestionCategory[]).map(
+              (cat) => {
+                const stats = getCategoryStats(cat);
+                const rate =
+                  stats.total > 0
+                    ? Math.round((stats.correct / stats.total) * 100)
+                    : 0;
+                return (
+                  <div key={cat} className="rounded-lg border p-3 text-center">
+                    <div className="text-xs text-gray-500 mb-1">
+                      {QUESTION_CATEGORY_LABELS[cat]}
+                    </div>
+                    <div
+                      className={`text-xl font-bold ${
+                        stats.total === 0
+                          ? 'text-gray-300'
+                          : rate >= 80
+                          ? 'text-green-600'
+                          : rate >= 50
+                          ? 'text-yellow-600'
+                          : 'text-red-600'
+                      }`}
+                    >
+                      {stats.total > 0 ? `${rate}%` : '-'}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-0.5">
+                      {stats.total > 0
+                        ? `${stats.correct}/${stats.total}回`
+                        : '未回答'}
+                    </div>
+                  </div>
+                );
+              }
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Exam sections */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6">

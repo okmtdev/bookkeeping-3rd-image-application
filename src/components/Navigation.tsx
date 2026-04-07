@@ -10,6 +10,7 @@ const navItems = [
   { href: '/practice', label: '第一問 仕訳', icon: '✏️' },
   { href: '/exam2', label: '第二問 勘定記入', icon: '📝' },
   { href: '/exam3', label: '第三問 精算表', icon: '📋' },
+  { href: '/history', label: '回答履歴', icon: '📈' },
   { href: '/statements', label: '財務諸表', icon: '📊' },
   { href: '/guide', label: '勘定科目ガイド', icon: '📚' },
 ];

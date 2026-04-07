@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { storyChapters } from '@/data/stories';
 import { useLedger } from '@/hooks/useLedger';
+import { useAnswerHistory } from '@/hooks/useAnswerHistory';
 import JournalEntryWorkspace from '@/components/JournalEntryWorkspace';
 import FinancialStatements from '@/components/FinancialStatements';
 
@@ -14,6 +15,7 @@ function StoryContent() {
   const [currentTransaction, setCurrentTransaction] = useState(0);
   const [showStatements, setShowStatements] = useState(false);
   const { progress, applyEntry, isLoaded } = useLedger();
+  const { addRecord } = useAnswerHistory();
 
   useEffect(() => {
     if (chapterParam !== null) {
@@ -46,6 +48,13 @@ function StoryContent() {
       transactionId
     );
   };
+
+  const handleAnswer = useCallback(
+    (questionId: string, questionTitle: string, isCorrect: boolean) => {
+      addRecord({ questionId, questionTitle, category: 'journal', isCorrect });
+    },
+    [addRecord]
+  );
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto">
@@ -119,6 +128,7 @@ function StoryContent() {
         transaction={transaction}
         onComplete={handleComplete}
         isCompleted={progress.completedTransactions.includes(transaction.id)}
+        onAnswer={handleAnswer}
       />
 
       {/* Financial statements toggle */}

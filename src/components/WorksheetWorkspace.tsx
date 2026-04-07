@@ -6,6 +6,7 @@ import { WorksheetQuestion } from '@/types';
 interface WorksheetWorkspaceProps {
   question: WorksheetQuestion;
   onCorrect?: () => void;
+  onAnswer?: (questionId: string, questionTitle: string, isCorrect: boolean) => void;
 }
 
 interface CellInputs {
@@ -23,7 +24,7 @@ const COLUMNS: { key: Column; label: string; group: string }[] = [
   { key: 'bsCredit', label: '貸方', group: '貸借対照表' },
 ];
 
-export default function WorksheetWorkspace({ question, onCorrect }: WorksheetWorkspaceProps) {
+export default function WorksheetWorkspace({ question, onCorrect, onAnswer }: WorksheetWorkspaceProps) {
   const [inputs, setInputs] = useState<CellInputs>({});
   const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
   const [showHint, setShowHint] = useState(false);
@@ -76,6 +77,7 @@ export default function WorksheetWorkspace({ question, onCorrect }: WorksheetWor
     } else {
       setResult('incorrect');
     }
+    onAnswer?.(question.id, question.title, allCorrect);
   };
 
   const handleShowAnswer = () => {
